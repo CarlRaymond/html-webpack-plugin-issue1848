@@ -1,0 +1,21 @@
+<% 
+	//get bundle file we're currently building. eg site.cshtml
+	var pathParts = _.split(htmlWebpackPlugin.options.filename, '/')
+	var file = pathParts[_.size(pathParts)-1]
+	var fileParts = _.split(file, '.')
+	var curFile = fileParts[0]
+	
+	//only show chunks that match current bundle file we're building
+	var chunkFile = ''
+	for (var chunk in htmlWebpackPlugin.tags.headTags) {
+		var tempChunk = _.replace(htmlWebpackPlugin.tags.headTags[chunk], '</script>', '')
+		var pathPartsChunk = _.split(tempChunk, '/') // htmlWebpackPlugin.tags.headTags[chunk], '/')
+		var fileChunk = pathPartsChunk[_.size(pathPartsChunk)-1]
+		var filePartsChunk = _.split(fileChunk, '.')
+		var curChunkFile = filePartsChunk[0]
+		
+		if (curChunkFile == curFile) {
+			chunkFile = htmlWebpackPlugin.tags.headTags[chunk]			
+		}
+	}
+%><%=chunkFile%>
